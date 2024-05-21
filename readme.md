@@ -7,6 +7,9 @@
 
 Le parti-pris pour mettre en place le cluster Redis, a été la conteneurisation de celui-ci avec l’utilisation de Docker. Ce choix s’explique par le fait que cette approche offre une gestion plus flexible des ressources, une isolation accrue et facilite le déploiement sur des environnements différents, donc utilisable avec environnements Windows ou bien Linux…
 
+[lien documentation configuration kibana](https://www.elastic.co/guide/en/kibana/current/docker.html)
+[lien documentation configuration elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/8.13/docker.html)
+
 #### Architecture du cluster 
 
 Le cluster est composé de trois services : es01, es02 et es03. C'est trois nœuds forme un cluster avec es01 configuré comme nœud maître puis les nœuds es02 et es03 comme nœud de données qui peuvent être élu maître en cas de problème avec le nœud es01. Les services tournent sur un réseau Docker nommé "lan_service". Une persistance des données à était mise en place puisque chaque servie possède un volume. Les ports par défauts d'elasticsearch sont utilisés (9200 pour les données & 9300 pour le cluster). 
@@ -494,6 +497,8 @@ Explication des filtres :
 - Le filtre *"french_elision"*, permet de supprimer toutes les élisions joint à la liste
 - Le filtre *"french_stop"*, permet de supprimer les mots couramment utilisés qui n'apporte pas de sens comme par exemple les articles : la, le, les...
 - Le filtre *"french_stemmer"*, permet de récupère uniquement la racine de chaque mot donc de ne pas prendre en compte la conjugaison
+
+[Lien blog optimisation de l'analyzer](https://jolicode.com/blog/construire-un-bon-analyzer-francais-pour-elasticsearch)
 
 * **Ajout de multiples documents à un index**
 
