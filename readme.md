@@ -33,6 +33,8 @@ Exemple d'un service :
       // Limitation de l'utilisation de la RAM
       - bootstrap.memory_lock=true 
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m" 
+      // Permet de désactiver la sécurité HTTP
+      - xpack.security.enabled=false
     volumes:
       - esdata01:/usr/share/elasticsearch/data
     networks:
@@ -57,6 +59,15 @@ cd TP3-NoSQL/
 ``` bash
 docker-compose up -d 
 ```
+4. Vérifier l'état des différents conteneurs, grâce à la commande ci-dessous :
+``` bash
+docker ps -a 
+```
+5. Vérifier l'état du cluster, pour effectuer cela il faut se connecter au conteneur "es01" puis exécuter la commande ci-dessous :
+```bash
+curl -X GET "localhost:9200/_cluster/health?format=json&pretty"
+```
+6. Le lancement du cluster est terminé. Bravo !
 
 ## Premiers Pas avec le Cluster Elasticsearch
 
@@ -68,6 +79,12 @@ Cette section est consacrée à la manipulation du cluster Elasticsearch, c’es
 #### Les différentes étapes illustrées
 
 Pour rendre la réponse plus lisible, nous rajoutons en query string : format=json&pretty pour obtenir des réponsesnse au format JSON et mise en forme
+
+**Pour exécuter les requêtes suivantes, il faut avoir effectué la section "Comment démarrer le cluster avec Docker ?", puis se connecter au conteneur grâce à la commande suivante :
+
+``` bash
+docker exec -it es01 bash
+```
 
 * **Créer un index nommé 'test01'**
 
@@ -593,6 +610,58 @@ Réponse, elle nous indique les informations liées à l'ajout de chaque documen
     }
   ]
 }
+```
+
+## Utilisation de kibana
+
+#### Comment utiliser Kibana ?
+
+Pour utiliser Kibana, il faut avoir effectué la partie "". Une fois cette partie effectuée, il suffit d'ouvrir le navigateur sur la machine host puis de se rendre à l'adresse suivante : http://localhost:5601 pour accéder à l'interface de Kibana. 
+
+Pour charger les données de test, il faut se rendre dans le menu parti "Management" puis cliquer sur la sous-rubrique "Integrations". Puis effectuer la recherche suivante "Sample Data" puis cliquer sur "add data".
+
+Une fois les données de test chargées, aller dans la partie "Discover" pour utiliser les données avec des requêtes KQL.
+
+[tuto pour charger les données](https://www.elastic.co/guide/en/kibana/current/connect-to-elasticsearch.html)
+
+#### Lister les vols dont le prix moyen est entre 300€ et 450€
+
+Pour obtenir uniquement les vols avec un prix moyen compris entre 300€ et 450€, il faut utiliser la requête KQL ci-dessous :
+```KQL
+AvgTicketPrice >= 300 and AvgTicketPrice <= 450
+```
+Nombre de résultats : 327
+
+#### Lister les vols annulés
+
+Pour obtenir uniquement les vols annulés, il faut utiliser la requête KQL ci-dessous :
+```KQL
+Cancelled : true
+```
+Nombre de résultats : 279
+
+#### Lister les vols où il pleut à l'arrivée ou au départ. Les vols avec de la pluie à l'arrivée devront sortir avant les autres.
+
+Pour obtenir uniquement les vols où il pleut à l'arrivée ou au départ puis lister les vols avec de la pluie à l'arrivée, il faut utiliser la requête KQL ci-dessous puis trier dans l'ordre alphabétique en fonction du champ "OriginWeather"  :
+```KQL
+OriginWeather : "Rain" or DestWeather : "Rain" 
+```
+Nombre de résultats : 706
+
+#### Lister les vols partant d'Allemagne et à destination de France
+
+Pour obtenir uniquement les vols partant d'Allemagne et à destination de France, il faut utiliser la requête KQL ci-dessous :
+```KQL
+OriginCountry : "DE" and DestCountry : "FR" 
+```
+
+Nombre de résultats : 0
+
+#### Lister les vols ayant eu lieu entre le 1er avril 2024 et le 20 mai 2024
+
+Pour obtenir uniquement les vols ayant eu lieu entre le 1er avril 2024 et le 20 mai 2024.
+```KQL
+Aucun champ correspondant pour filtre en fonction de la date.
 ```
 
  

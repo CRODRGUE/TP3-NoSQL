@@ -1,6 +1,6 @@
 services:
   es01:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.12.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
     container_name: es01
     environment:
       - cluster.name=es-cluster
@@ -9,12 +9,15 @@ services:
       - discovery.seed_hosts=es02,es03
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
     volumes:
       - esdata01:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
     networks:
       - lan_services
   es02:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.12.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
     container_name: es02
     environment:
       - cluster.name=es-cluster
@@ -23,12 +26,13 @@ services:
       - discovery.seed_hosts=es01,es03
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
     volumes:
       - esdata02:/usr/share/elasticsearch/data
     networks:
       - lan_services
   es03:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.12.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
     container_name: es03
     environment:
       - cluster.name=es-cluster
@@ -37,6 +41,7 @@ services:
       - discovery.seed_hosts=es01,es02
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
     volumes:
       - esdata03:/usr/share/elasticsearch/data
     networks:
@@ -44,8 +49,14 @@ services:
   kibana:
     image: docker.elastic.co/kibana/kibana:8.13.4
     container_name: kibana
+    depends_on:
+      - es01
+      - es02
+      - es03
     environment:
       - ELASTICSEARCH_HOSTS=http://es01:9200
+    ports:
+      - 5601:5601
     networks:
       - lan_services
 volumes:
