@@ -5,7 +5,7 @@
 
 #### Choix de l’environnement 
 
-Le parti-pris pour mettre en place le cluster Redis, a été la conteneurisation de celui-ci avec l’utilisation de Docker. Ce choix s’explique par le fait que cette approche offre une gestion plus flexible des ressources, une isolation accrue et facilite le déploiement sur des environnements différents, donc utilisable avec environnements Windows ou bien Linux…
+Le parti-pris pour mettre en place le cluster Elasticsearch, a été la conteneurisation de celui-ci avec l’utilisation de Docker. Ce choix s’explique par le fait que cette approche offre une gestion plus flexible des ressources, une isolation accrue et facilite le déploiement sur des environnements différents, donc utilisable avec environnements Windows ou bien Linux…
 
 [lien documentation configuration kibana](https://www.elastic.co/guide/en/kibana/current/docker.html)
 [lien documentation configuration elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/8.13/docker.html)
